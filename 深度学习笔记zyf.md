@@ -656,6 +656,7 @@ Test score: 0.0662498661814956
 ![img](https://raw.githubusercontent.com/zhangyf99/Deeplearning/master/static/3-zyf.png)
 
 修改了两处代码：
+
 1.删除了show_accuracy参数。原因：新版本中不再支持show_accuracy参数，升级后支持的参数可以参阅https://keras.io/models/model/。这里直接把代码中的两处show_accuracy参数删掉。
 
 2.修改了打印的evaluate()返回值。evaluate()用于评估已经训练过的模型，返回损失值与模型的度量值。但通过print(model.metrics_names)发现这里只返回了损失值。这可能是由于模型具有单个输出且没有度量。
