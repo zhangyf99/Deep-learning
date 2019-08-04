@@ -273,7 +273,7 @@ Python
 > * `hist`为直方图
 > * `boxplot`为盒型图
 > * `area`为“面积”
-> * scatter`为散点图
+> * scatter为散点图
 
 ## 实例代码学习
 
@@ -437,8 +437,6 @@ $$
 
   在一定程度上增加稳定性，从而学习速度相对于SGD更快，而且还有一定摆脱局部最优的能力。
 
-* 缺点：
-
 * 改进方法：引入Nesterov Momentum
 
 ### Nesterov Momentum
@@ -540,6 +538,8 @@ $$
 
 ### Adam
 
+>Adam是实际学习中最常用的算法
+
 Adam(Adaptive Moment  Estimation)本质上是带有动量项的RMSprop，它利用梯度的一阶矩估计和二阶矩估计动态调整每个参数的学习率。Adam的优点主要在于经过偏置校正后，每一次迭代学习率都有个确定范围，使得参数比较平稳。公式如下：
 
 ![m_t=\mu*m_{t-1}+(1-\mu)*g_t](https://zhihu.com/equation?tex=m_t%3D%5Cmu%2Am_%7Bt-1%7D%2B%281-%5Cmu%29%2Ag_t)
@@ -576,7 +576,13 @@ Adam(Adaptive Moment  Estimation)本质上是带有动量项的RMSprop，它利�
 
   也适用于大多非凸优化- 适用于大数据集和高维空间
 
-![点击查看源网页](https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564937146162&di=4e895702fd65b87d71329c6767781f4c&imgtype=0&src=http%3A%2F%2Fimg.mp.sohu.com%2Fq_mini%2Cc_zoom%2Cw_640%2Fupload%2F20170621%2Ff9bf09f8653e441ebf11fe8b201e61f1_th.jpg)
+优化方法在实际中的直观体验:
+
+![img](https://img2018.cnblogs.com/blog/1425630/201809/1425630-20180917092038787-2101213597.gif)
+
+损失曲面的轮廓和不同优化算法的时间演化。 注意基于动量的方法的“过冲”行为，这使得优化看起来像一个滚下山的球
+
+![img](https://img2018.cnblogs.com/blog/1425630/201809/1425630-20180917092153639-1928194678.gif)
 
 ## 参考文献
 
@@ -586,3 +592,4 @@ Adam(Adaptive Moment  Estimation)本质上是带有动量项的RMSprop，它利�
 
 《深度学习最全优化方法总结比较》https://www.cnblogs.com/callyblog/p/8299074.html
 
+《深度学习常见的优化方法》https://www.cnblogs.com/GeekDanny/p/9655597.html
