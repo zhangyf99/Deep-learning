@@ -697,6 +697,8 @@ Network Pruning（网络剪枝）：去除CNN模型的部分结构以减少仿�
 
 ![ä» SGD å° Adam ââ æ·±åº¦å­¦ä¹ ä¼åç®æ³æ¦è§(ä¸)](https://pic4.zhimg.com/v2-4a3b4a39ab8e5c556359147b882b4788_1200x500.gif)
 
+**梯度下降法**
+
 梯度下降是指，在给定待优化的模型参数 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctheta+%5Cin+%5Cmathbb%7BR%7D%5Ed) 和目标函数 ![[公式]](https://www.zhihu.com/equation?tex=J%28%5Ctheta%29) 后，算法通过沿梯度 ![[公式]](https://www.zhihu.com/equation?tex=%5Cnabla_%5Ctheta+J%28%5Ctheta%29) 的相反方向更新 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctheta) 来最小化 ![[公式]](https://www.zhihu.com/equation?tex=J%28%5Ctheta%29) 。学习率 ![[公式]](https://www.zhihu.com/equation?tex=%5Ceta) 决定了每一时刻的更新步长。对于每一个时刻 ![[公式]](https://www.zhihu.com/equation?tex=t) ，我们可以用下述步骤描述梯度下降的流程：
 
 (1) 计算目标函数关于参数的梯度
@@ -715,6 +717,16 @@ Network Pruning（网络剪枝）：去除CNN模型的部分结构以减少仿�
 
 其中， ![[公式]](https://www.zhihu.com/equation?tex=%5Cepsilon) 为平滑项，防止分母为零，通常取 1e-8。
 
+梯度下降法目前主要分为三种方法,区别在于每次参数更新时计算的样本数据量不同：批量梯度下降法(BGD, Batch Gradient Descent)，随机梯度下降法(SGD, Stochastic Gradient Descent)及小批量梯度下降法(Mini-batch Gradient Descent)。
+
+**动量优化 **
+
+动量优化方法引入物理学中的动量思想，加速梯度下降，有Momentum和Nesterov两种算法。当我们将一个小球从山上滚下来，没有阻力时，它的动量会越来越大，但是如果遇到了阻力，速度就会变小，动量优化法就是借鉴此思想，使得梯度方向在不变的维度上，参数更新变快，梯度有所改变时，更新参数变慢，这样就能够加快收敛并且减少动荡。
+
+**自适应学习率优化算法**
+
+在机器学习中，学习率是一个非常重要的超参数，但是学习率是非常难确定的，虽然可以通过多次训练来确定合适的学习率，但是一般也不太确定多少次训练能够得到最优的学习率，玄学事件，对人为的经验要求比较高，所以是否存在一些策略自适应地调节学习率的大小，从而提高训练速度。 目前的自适应学习率优化算法主要有：AdaGrad算法，RMSProp算法，Adam算法以及AdaDelta算法。
+
 ##### 随机梯度下降算法（SGD）
 
 没有动量的概念，即
@@ -729,7 +741,10 @@ Network Pruning（网络剪枝）：去除CNN模型的部分结构以减少仿�
 
 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctheta_%7Bi%2B1%7D%3D+%5Ctheta_t+-+%5Ceta+g_t)
 
-SGD 的缺点在于收敛速度慢，可能在鞍点处震荡。并且，如何合理的选择学习率是 SGD 的一大难点。
+缺点：
+
+- 在于收敛速度慢，可能在鞍点处震荡。
+- 如何合理的选择学习率是 SGD 的一大难点。
 
 ##### Momentum
 
@@ -745,6 +760,12 @@ SGD-M 在原步长之上，增加了与上一时刻步长相关的 ![[公式]](h
 
 从图 1 中可以看出，引入动量有效的加速了梯度下降收敛过程。
 
+特点：
+
+- 在梯度方向改变时，momentum能够降低参数更新速度，从而减少震荡。
+- 在梯度方向相同时，momentum可以加速参数更新， 从而加速收敛。
+- momentum能够加速SGD收敛，抑制震荡。
+
 ##### Nesterov Accelerated Gradient
 
 ![img](https://pic4.zhimg.com/80/v2-fecd469405501ad82788f068985b25cb_hd.jpg)图 2: Nesterov update
@@ -756,6 +777,11 @@ NAG 即是为此而设计的，其在 SGD-M 的基础上进一步改进了步骤
 ![[公式]](https://www.zhihu.com/equation?tex=g_t+%3D+%5Cnabla_%5Ctheta+J%28%5Ctheta+-+%5Cgamma+m_%7Bt-1%7D%29)
 
 参考图 2，SGD-M 的步长计算了当前梯度（短蓝向量）和动量项 （长蓝向量）。然而，既然已经利用了动量项来更新 ，那不妨先计算出下一时刻 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctheta) 的近似位置 （棕向量），并根据该未来位置计算梯度（红向量），然后使用和 SGD-M 中相同的方式计算步长（绿向量）。这种计算梯度的方式可以使算法更好的「预测未来」，提前调整更新速率。
+
+特点：
+
+- NAG是momentum的改进。
+- 在之前加速的梯度方向进行一个大的跳跃(棕色向量)，计算梯度然后进行校正(绿色梯向量)
 
 ##### Adagrad
 
@@ -769,6 +795,28 @@ Adagrad[4] 算法即可达到此效果。其引入了二阶动量：
 
 此时，可以这样理解：学习率等效为 ![[公式]](https://www.zhihu.com/equation?tex=%5Ceta+%2F+%5Csqrt%7Bv_t+%2B+%5Cepsilon%7D) 。对于此前频繁更新过的参数，其二阶动量的对应分量较大，学习率就较小。这一方法在稀疏数据的场景下表现很好。
 
+缺点：
+
+- 仍需要手工设置一个全局学习率 ![[公式]](https://www.zhihu.com/equation?tex=%5Cdelta) , 如果 ![[公式]](https://www.zhihu.com/equation?tex=%5Cdelta) 设置过大的话，会使regularizer过于敏感，对梯度的调节太大
+- 中后期，分母上梯度累加的平方和会越来越大，使得参数更新量趋近于0，使得训练提前结束，无法学习
+
+##### Adadelta
+
+Adagrad会累加之前所有的梯度平方，而Adadelta只累加固定大小的项，并且也不直接存储这些项，仅仅是近似计算对应的平均值
+
+![[公式]](https://www.zhihu.com/equation?tex=g+%5Cleftarrow+%5Ctriangledown_%7B%5Ctheta%7D+%5C%5C+J+%5Cleft%28%5Ctheta+%5Cright%29+%5C++n_%7Bt%7D+%5Cleftarrow+v+%5Ccdot+n_%7Bt-1%7D+%2B+%5Cleft%281+-v+%5Cright%29+%5Ccdot+g_%7Bt%7D%5E%7B2%7D+%5C%5C+++%5Ctheta_%7Bt%2B1%7D+%3D+%5Ctheta_%7Bt%7D+-+%5Cfrac%7B%5Cdelta%7D%7B%5Csqrt%7Bn_%7Bt%7D+%2B+%5Cepsilon%7D%7D+%5Ccdot+g_%7Bt%7D+)
+
+从上式中可以看出，Adadelta其实还是依赖于全局学习率$\delta$，但是作者做了一定处理，经过近似牛顿迭代法之后
+
+![[公式]](https://www.zhihu.com/equation?tex=E+%5Cleft%5B+g%5E%7B2%7D%5Cright%5D_%7Bt%7D+%5Cleftarrow+%5Crho+%5Ccdot+E+%5Cleft%5B+g%5E%7B2%7D%5Cright%5D_%7Bt-1%7D%2B+%5Cleft%281+-+%5Crho+%5Cright%29+%5Ccdot+g_%7Bt%7D%5E%7B2%7D+%5C%5C+%5Ctriangle+%5Ctheta+%5Cleftarrow+%5Cfrac%7B%5Csum_%7Bi%3D1%7D%5E%7Bt-1%7D+%5Ctriangle+%5Ctheta_%7Br%7D%7D%7B%5Csqrt%7BE+%5Cleft%5B+g%5E%7B2%7D%5Cright%5D_%7Bt%7D+%2B+%5Cepsilon%7D%7D+)
+
+此时可以看出Adadelta已经不依赖全局learning rate了。
+
+特点：
+
+- 训练初中期，加速效果不错，很快。
+- 训练后期，反复在局部最小值附近抖动。
+
 ##### RMSprop
 
 在 Adagrad 中， ![[公式]](https://www.zhihu.com/equation?tex=v_t) 是单调递增的，使得学习率逐渐递减至 0，可能导致训练过程提前结束。为了改进这一缺点，可以考虑在计算二阶动量时不累积全部历史梯度，而只关注最近某一时间窗口内的下降梯度。根据此思想有了 RMSprop[5]。记 ![[公式]](https://www.zhihu.com/equation?tex=g_t+%5Codot+g_t) 为 ![[公式]](https://www.zhihu.com/equation?tex=g_t%5E2) ，有
@@ -776,6 +824,12 @@ Adagrad[4] 算法即可达到此效果。其引入了二阶动量：
 ![[公式]](https://www.zhihu.com/equation?tex=v_t+%3D+%5Cgamma+v_%7Bt-1%7D+%2B+%281-%5Cgamma%29+%5Ccdot+%5Ctext%7Bdiag%7D%28g_t%5E2%29)
 
 其二阶动量采用指数移动平均公式计算，这样即可避免二阶动量持续累积的问题。和 SGD-M 中的参数类似，![[公式]](https://www.zhihu.com/equation?tex=%5Cgamma) 通常取 0.9 左右。
+
+特点：
+
+- 其实RMSprop依然依赖于全局学习率 ![[公式]](https://www.zhihu.com/equation?tex=%5Cdelta)
+- RMSprop算是Adagrad的一种发展，和Adadelta的变体，效果趋于二者之间
+- 适合处理非平稳目标——对于RNN效果很好
 
 ##### Adam
 
@@ -802,3 +856,18 @@ Adam[6] 可以认为是 RMSprop 和 Momentum 的结合。和 RMSprop 对二阶�
 ![[公式]](https://www.zhihu.com/equation?tex=%5Ctheta_%7Bt%2B1%7D+%3D+%5Ctheta_t+-+%5Cfrac%7B1%7D%7B%5Csqrt%7B%5Chat%7Bv%7D_t%7D+%2B+%5Cepsilon+%7D+%5Chat%7Bm%7D_t)
 
 可以保证迭代较为平稳。
+
+特点：
+
+- Adam梯度经过偏置校正后，每一次迭代学习率都有一个固定范围，使得参数比较平稳。
+- 结合了Adagrad善于处理稀疏梯度和RMSprop善于处理非平稳目标的优点
+- 为不同的参数计算不同的自适应学习率
+- 也适用于大多非凸优化问题——适用于大数据集和高维空间。
+
+**总结：**
+
+下图是各个算法在等高线的表现，它们都从相同的点出发，走不同的路线达到最小值点。可以看到，Adagrad，Adadelta和RMSprop在正确的方向上很快地转移方向，并且快速地收敛，然而Momentum和NAG先被领到一个偏远的地方，然后才确定正确的方向，NAG比momentum率先更正方向。SGD则是缓缓地朝着最小值点前进。
+
+对于稀疏数据，尽量使用学习率可自适应的优化方法，不用手动调节，而且最好采用默认值；SGD通常训练时间更长，但是在好的初始化和学习率调度方案的情况下，结果更可靠；如果在意更快的收敛，并且需要训练较深较复杂的网络时，推荐使用学习率自适应的优化方法。；Adadelta，RMSprop，Adam是比较相近的算法，在相似的情况下表现差不多。
+
+![img](https://pic4.zhimg.com/v2-ed8f70ed5bb8e8a5ba4dd0cf99c0f557_b.gif)
