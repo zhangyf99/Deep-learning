@@ -754,9 +754,13 @@ SGD 在遇到沟壑时容易陷入震荡。为此，可以为其引入动量 Mom
 
 SGD-M 在原步长之上，增加了与上一时刻步长相关的 ![[公式]](https://www.zhihu.com/equation?tex=%5Cgamma+m_%7Bt-1%7D) ，![[公式]](https://www.zhihu.com/equation?tex=%5Cgamma) 通常取 0.9 左右。这意味着参数更新方向不仅由当前的梯度决定，也与此前累积的下降方向有关。这使得参数中那些梯度方向变化不大的维度可以加速更新，并减少梯度方向变化较大的维度上的更新幅度。由此产生了加速收敛和减小震荡的效果。
 
-![img](https://pic4.zhimg.com/80/v2-2476080e4cdfd489ae64ae3ceeafe48b_hd.jpg)图 1(a): SGD
+![img](https://pic4.zhimg.com/80/v2-2476080e4cdfd489ae64ae3ceeafe48b_hd.jpg)
 
-![img](https://pic4.zhimg.com/80/v2-b9388fd6e465d82687680f9d16edcd2b_hd.jpg)图 1(b): SGD with momentum
+图 1(a): SGD
+
+![img](https://pic4.zhimg.com/80/v2-b9388fd6e465d82687680f9d16edcd2b_hd.jpg)
+
+图 1(b): SGD with momentum
 
 从图 1 中可以看出，引入动量有效的加速了梯度下降收敛过程。
 
@@ -768,7 +772,9 @@ SGD-M 在原步长之上，增加了与上一时刻步长相关的 ![[公式]](h
 
 ##### Nesterov Accelerated Gradient
 
-![img](https://pic4.zhimg.com/80/v2-fecd469405501ad82788f068985b25cb_hd.jpg)图 2: Nesterov update
+![img](https://pic4.zhimg.com/80/v2-fecd469405501ad82788f068985b25cb_hd.jpg)
+
+图 2: Nesterov update
 
 更进一步的，人们希望下降的过程更加智能：算法能够在目标函数有增高趋势之前，减缓更新速率。
 
