@@ -214,7 +214,7 @@ numpy.reshape() 函数可以在不改变数据的条件下修改形状，格式�
 pandas.DataFrame( data, index, columns, dtype, copy)
 ```
 
-构造函数的参数如下 -  
+> 构造函数的参数如下 -  
 
 | 编号 | 参数      | 描述                                                         |
 | ---- | --------- | ------------------------------------------------------------ |
@@ -357,7 +357,40 @@ print('Test accuracy:', score[1])
 
 最终结果：
 
-![1564927005547](C:\Users\sekhuinaam\AppData\Roaming\Typora\typora-user-images\1564927005547.png)
+```
+x_train shape: (60000, 28, 28, 1)
+60000 train samples
+10000 test samples
+Train on 60000 samples, validate on 10000 samples
+Epoch 1/12
+60000/60000 [==============================] - 4s 74us/step - loss: 0.2602 - acc: 0.9191 - val_loss: 0.0603 - val_acc: 0.9809
+Epoch 2/12
+60000/60000 [==============================] - 4s 68us/step - loss: 0.0878 - acc: 0.9742 - val_loss: 0.0435 - val_acc: 0.9860
+Epoch 3/12
+60000/60000 [==============================] - 4s 69us/step - loss: 0.0658 - acc: 0.9806 - val_loss: 0.0340 - val_acc: 0.9878
+Epoch 4/12
+60000/60000 [==============================] - 4s 68us/step - loss: 0.0524 - acc: 0.9843 - val_loss: 0.0329 - val_acc: 0.9890
+Epoch 5/12
+60000/60000 [==============================] - 4s 69us/step - loss: 0.0469 - acc: 0.9862 - val_loss: 0.0289 - val_acc: 0.9899
+Epoch 6/12
+60000/60000 [==============================] - 4s 69us/step - loss: 0.0409 - acc: 0.9872 - val_loss: 0.0272 - val_acc: 0.9911
+Epoch 7/12
+60000/60000 [==============================] - 4s 69us/step - loss: 0.0389 - acc: 0.9879 - val_loss: 0.0296 - val_acc: 0.9903
+Epoch 8/12
+60000/60000 [==============================] - 4s 68us/step - loss: 0.0330 - acc: 0.9900 - val_loss: 0.0254 - val_acc: 0.9919
+Epoch 9/12
+60000/60000 [==============================] - 4s 69us/step - loss: 0.0312 - acc: 0.9908 - val_loss: 0.0263 - val_acc: 0.9905
+Epoch 10/12
+60000/60000 [==============================] - 4s 68us/step - loss: 0.0288 - acc: 0.9912 - val_loss: 0.0252 - val_acc: 0.9922
+Epoch 11/12
+60000/60000 [==============================] - 4s 70us/step - loss: 0.0266 - acc: 0.9916 - val_loss: 0.0286 - val_acc: 0.9915
+Epoch 12/12
+60000/60000 [==============================] - 4s 69us/step - loss: 0.0251 - acc: 0.9919 - val_loss: 0.0300 - val_acc: 0.9915
+Test loss: 0.03001883054177006
+Test accuracy: 0.9915
+```
+
+
 
 ### keras-mnist-tutorial
 
@@ -365,25 +398,67 @@ print('Test accuracy:', score[1])
 
 >  在跑程序的过程中发现
 >
-> ```
-> model.fit(X_train, Y_train,
->           batch_size=128, nb_epoch=4,
->           show_accuracy=True, verbose=1,
->           validation_data=(X_test, Y_test))
-> ```
+>  ```
+>  model.fit(X_train, Y_train,
+>         batch_size=128, nb_epoch=4,
+>         show_accuracy=True, verbose=1,
+>         validation_data=(X_test, Y_test))
+>  ```
 >
-> 这里参数报错了，然后我参照mnist_cnn.py修改，把show_accuracy=True删去，不知道是不是版本的原因，可能最新的版本没有这个参数or改进了？
+>  这里参数报错了
 >
-> 以及最后，score的输出
+>  > TypeError: Unrecognized keyword arguments: {'show_accuracy': True}
 >
-> ```
-> score = model.evaluate(X_test, Y_test,
->                        show_accuracy=True, verbose=0)
-> print('Test score:', score[0])
-> print('Test accuracy:', score[1])
-> ```
+>  ，然后我参照mnist_cnn.py修改，把show_accuracy=True删去，还有把nb_epoch改为epochs，不知道是不是版本的原因，可能最新的版本没有这个参数or改进了？
 >
-> 显示了index value，于是我把score[]改为score，最后成功输出accuracy。
+>  输出结果为：
+>
+>  ```
+>  Train on 60000 samples, validate on 10000 samples
+>  Epoch 1/4
+>  60000/60000 [==============================] - 2s 26us/step - loss: 0.0144 - val_loss: 0.0581
+>  Epoch 2/4
+>  60000/60000 [==============================] - 1s 22us/step - loss: 0.0115 - val_loss: 0.0563
+>  Epoch 3/4
+>  60000/60000 [==============================] - 1s 22us/step - loss: 0.0115 - val_loss: 0.0553
+>  Epoch 4/4
+>  60000/60000 [==============================] - 1s 21us/step - loss: 0.0093 - val_loss: 0.0549
+>  ```
+>
+>  ```
+>  <keras.callbacks.History at 0x7fa938b21748>
+>  ```
+>
+>  以及最后，关于score的输出：
+>
+>  ```
+>  score = model.evaluate(X_test, Y_test,
+>                      show_accuracy=True, verbose=0)
+>  print('Test score:', score[0])
+>  print('Test accuracy:', score[1])
+>  ```
+>
+>  显示了
+>
+>  > IndexError: invalid index to scalar variable.
+>
+>  于是我把score[]改为score，
+>
+>  ```
+>  score = model.evaluate(X_test,Y_test)
+>  print('Test accuracy:', score)
+>  ```
+>
+>  最后成功输出accuracy。
+>
+>  结果：
+>
+>  ```
+>  10000/10000 [==============================] - 0s 33us/step
+>  Test accuracy: 0.06877802454089396
+>  ```
+>
+>  
 
 ## 深度学习优化方法
 
@@ -400,6 +475,8 @@ $$
 ### SGD
 
 方法：SGD指的是stochastic gradient descent，即随机梯度下降。  对于训练数据集，我们首先将其分成n个batch，每个batch包含m个样本。我们每次更新都利用batch的数据，而非整个训练集。即：
+
+![img](https://images2017.cnblogs.com/blog/1218582/201801/1218582-20180116222037021-1729097658.jpg)
 $$
 x_{t+1}=x_t+\Delta x_t
 $$
@@ -427,6 +504,8 @@ $$
 ### Momentum
 
 方法：momentum即动量，它模拟的是物体运动时的惯性，即更新的时候在一定程度上保留之前更新的方向，同时利用当前batch的梯度微调最终的更新方向。这样一来，可以在一定程度上增加稳定性，从而学习地更快，并且还有一定摆脱局部最优的能力：
+
+![img](https://images2017.cnblogs.com/blog/1218582/201801/1218582-20180116222155974-1758841902.jpg)
 $$
 \Delta x_t=\rho \Delta x_{t-1} -\eta g_t
 $$
@@ -444,6 +523,8 @@ $$
 ![Nesterov Momentum](http://img.blog.csdn.net/20150906103038485)
 
 这是对传统momentum方法的一项改进，由Ilya Sutskever(2012 unpublished)在Nesterov工作的启发下提出的。首先，按照原来的更新方向更新一步（棕色线），然后在该位置计算梯度值（红色线），然后用这个梯度值修正最终的更新方向（绿色线）。上图中描述了两步的更新示意图，其中蓝色线是标准momentum更新路径。公式描述为：
+
+![img](https://images2017.cnblogs.com/blog/1218582/201801/1218582-20180116222245506-303041880.jpg)
 $$
 \Delta x_t=\rho \Delta x_{t-1}-\eta \Delta f(x_t +\rho \Delta x_{t-1})
 $$
@@ -451,6 +532,8 @@ $$
 ### Adagrad
 
 方法：对学习率进行一个约束，即
+
+![img](https://images2017.cnblogs.com/blog/1218582/201801/1218582-20180116222331021-786003572.jpg)
 $$
 n_t=n_{t-1}+g_t^2
 $$
@@ -460,6 +543,8 @@ $$
 $$
 
 此处，对gt从1到t进行一个递推形成一个约束项regularizer
+
+![-\frac{1}{\sqrt{\sum_{r=1}^t(g_r)^2+\epsilon}}](https://zhihu.com/equation?tex=-%5Cfrac%7B1%7D%7B%5Csqrt%7B%5Csum_%7Br%3D1%7D%5Et%28g_r%29%5E2%2B%5Cepsilon%7D%7D)
 $$
 -\frac{1}{\sqrt{\sum_{r=1}^t(g_t)^2+\epsilon}}
 $$
@@ -486,6 +571,10 @@ $$
 ### Adadelta
 
 方法：Adadelta是对Adagrad的扩展，最初方案依然是对学习率进行自适应约束，但是进行了计算上的简化。Adagrad会累加之前所有的梯度平方，而Adadelta只累加固定大小的项，并且也不直接存储这些项，仅仅是近似计算对应的平均值。即：
+
+![n_t=\nu*n_{t-1}+(1-\nu)*g_t^2](https://zhihu.com/equation?tex=n_t%3D%5Cnu%2An_%7Bt-1%7D%2B%281-%5Cnu%29%2Ag_t%5E2)
+
+![\Delta{\theta_t} = -\frac{\eta}{\sqrt{n_t+\epsilon}}*g_t](https://zhihu.com/equation?tex=%5CDelta%7B%5Ctheta_t%7D+%3D+-%5Cfrac%7B%5Ceta%7D%7B%5Csqrt%7Bn_t%2B%5Cepsilon%7D%7D%2Ag_t)
 $$
 n_t=v*n_{t-1}+(1-v)*g_t^2
 $$
@@ -495,6 +584,12 @@ $$
 $$
 
 在此处Adadelta其实还是依赖于全局学习率的，但是作者做了一定处理，经过近似[牛顿迭代法](https://www.zhihu.com/question/20690553)（求根点）之后：
+
+![E|g^2|_t=\rho*E|g^2|_{t-1}+(1-\rho)*g_t^2](https://zhihu.com/equation?tex=E%7Cg%5E2%7C_t%3D%5Crho%2AE%7Cg%5E2%7C_%7Bt-1%7D%2B%281-%5Crho%29%2Ag_t%5E2)
+
+![\Delta{x_t}=-\frac{\sqrt{\sum_{r=1}^{t-1}\Delta{x_r}}}{\sqrt{E|g^2|_t+\epsilon}}](https://zhihu.com/equation?tex=%5CDelta%7Bx_t%7D%3D-%5Cfrac%7B%5Csqrt%7B%5Csum_%7Br%3D1%7D%5E%7Bt-1%7D%5CDelta%7Bx_r%7D%7D%7D%7B%5Csqrt%7BE%7Cg%5E2%7C_t%2B%5Cepsilon%7D%7D)
+
+
 $$
 E\begin{vmatrix} g^2 \end{vmatrix}_t=\rho *\begin{vmatrix} g^2 \end{vmatrix}_{t-1}+(1-\rho)*g_t^2
 $$
@@ -516,14 +611,18 @@ $$
 ### RMSprop
 
 RMSprop可以算作Adadelta的一个特例： 
-$$
-当\rho=0.5，E\begin{vmatrix} g^2 \end{vmatrix}_t=\rho *\begin{vmatrix} g^2 \end{vmatrix}_{t-1}+(1-\rho)*g_t^2就变为了求梯度平方和的平均数
-$$
+
+当![\rho=0.5](https://zhihu.com/equation?tex=%5Crho%3D0.5)时，![E|g^2|_t=\rho*E|g^2|_{t-1}+(1-\rho)*g_t^2](https://zhihu.com/equation?tex=E%7Cg%5E2%7C_t%3D%5Crho%2AE%7Cg%5E2%7C_%7Bt-1%7D%2B%281-%5Crho%29%2Ag_t%5E2)就变为了求梯度平方和的平均数。
+
 如果再求根的话，就变成了RMS(均方根)：
+
+![RMS|g|_t=\sqrt{E|g^2|_t+\epsilon}](https://zhihu.com/equation?tex=RMS%7Cg%7C_t%3D%5Csqrt%7BE%7Cg%5E2%7C_t%2B%5Cepsilon%7D)
 $$
 RMS\begin{vmatrix} g \end{vmatrix}_t=\sqrt{E\begin{vmatrix} g^2 \end{vmatrix}+\epsilon}
 $$
 此时，这个RMS就可以作为学习率\eta 的一个约束：
+
+![\Delta{x_t}=-\frac{\eta}{RMS|g|_t}*g_t](https://zhihu.com/equation?tex=%5CDelta%7Bx_t%7D%3D-%5Cfrac%7B%5Ceta%7D%7BRMS%7Cg%7C_t%7D%2Ag_t)
 $$
 \Delta x_t=-\frac \eta {RMS\begin{vmatrix} g \end{vmatrix}_t}*g_t
 $$
